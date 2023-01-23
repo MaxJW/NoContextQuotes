@@ -12,7 +12,7 @@
     let newQuote = '';
 
     let stringList = [];
-    let randomString = '.';
+    let randomString = '';
 
     function selectRandomString() {
         let oldString = randomString;
@@ -34,7 +34,7 @@
 
 <div class="profile">
     <div class="heading">
-        <Typewriter mode="concurrent">
+        <Typewriter mode="concurrent" keepCursorOnFinish="true">
             <h1 id="random-text">{randomString}</h1>
         </Typewriter>
         <button class="random-button" on:click={selectRandomString}>Load Random Quote</button>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { db } from '../firebase.js';
     import { doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
+    import { toast } from '@zerodevx/svelte-toast';
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
@@ -13,11 +14,20 @@
     let randomString = '.';
 
     function selectRandomString() {
-        randomString = stringList[Math.floor(Math.random() * stringList.length)];
+        let oldString = randomString;
+        while (randomString == oldString) {
+            randomString = stringList[Math.floor(Math.random() * stringList.length)];
+        }
     }
 
     async function addQuote() {
-        await updateDoc(docRef, { quote_list: arrayUnion(newQuote) });
+        if (newQuote != '') {
+            toast.push('Submitting quote...');
+            await updateDoc(docRef, { quote_list: arrayUnion(newQuote) }).then(() => {
+                toast.push('Quote submitted!');
+                newQuote = '';
+            });
+        }
     }
 </script>
 

@@ -2,6 +2,7 @@
     import { db } from '../firebase.js';
     import { doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
     import { toast } from '@zerodevx/svelte-toast';
+    import Typewriter from 'svelte-typewriter';
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
@@ -33,7 +34,9 @@
 
 <div class="profile">
     <div class="heading">
-        <h1 id="random-text">{randomString}</h1>
+        <Typewriter mode="concurrent">
+            <h1 id="random-text">{randomString}</h1>
+        </Typewriter>
         <button class="random-button" on:click={selectRandomString}>Load Random Quote</button>
         <input
             id="new-quote-input"

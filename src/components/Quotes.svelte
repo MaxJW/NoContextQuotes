@@ -10,9 +10,10 @@
         console.log(stringList);
     });
     let newQuote = '';
+    let newAuthor = '';
 
     let stringList = [];
-    let randomString = '';
+    let randomString = { quote: '', author: '' };
 
     function selectRandomString() {
         let oldString = randomString;
@@ -22,11 +23,13 @@
     }
 
     async function addQuote() {
-        if (newQuote != '') {
+        if (newQuote != '' && newAuthor != '') {
+            let quoteAuthor = { quote: newQuote, author: newAuthor };
             toast.push('Submitting quote...');
-            await updateDoc(docRef, { quote_list: arrayUnion(newQuote) }).then(() => {
+            await updateDoc(docRef, { quote_list: arrayUnion(quoteAuthor) }).then(() => {
                 toast.push('Quote submitted!');
                 newQuote = '';
+                newAuthor = '';
             });
         }
     }
@@ -35,7 +38,10 @@
 <div class="profile">
     <div class="heading">
         <Typewriter mode="concurrent" keepCursorOnFinish="true">
-            <h1 id="random-text">{randomString}</h1>
+            <h1 class="random-text">{randomString.quote}</h1>
+        </Typewriter>
+        <Typewriter mode="concurrent" keepCursorOnFinish="true">
+            <h1 class="random-text">{randomString.author}</h1>
         </Typewriter>
         <button class="random-button" on:click={selectRandomString}>Load Random Quote</button>
         <input
@@ -43,6 +49,12 @@
             type="text"
             bind:value={newQuote}
             placeholder="Submit a new quote here"
+        />
+        <input
+            id="new-quote-input-author"
+            type="text"
+            bind:value={newAuthor}
+            placeholder="Write the author of the quote here"
         />
         <button class="random-button" on:click={addQuote}>Add Quote</button>
     </div>
@@ -68,7 +80,7 @@
         pointer-events: all;
     }
 
-    .heading #random-text {
+    .heading .random-text {
         font-size: 2.5rem;
         font-weight: 500;
         margin-top: 5px;
@@ -79,6 +91,14 @@
     #new-quote-input {
         margin: 0 auto;
         margin-top: 50px;
+        margin-bottom: 10px;
+        width: 500px;
+        max-width: 90vw;
+    }
+
+    #new-quote-input-author {
+        margin: 0 auto;
+        margin-top: 5px;
         margin-bottom: 10px;
         width: 500px;
         max-width: 90vw;

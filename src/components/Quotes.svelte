@@ -9,6 +9,9 @@
         stringList = doc.data().quote_list;
         console.log(stringList);
     });
+
+    let spoiler = true;
+
     let newQuote = '';
     let newAuthor = '';
 
@@ -16,6 +19,7 @@
     let randomString = { quote: '', author: '' };
 
     function selectRandomString() {
+        spoiler = true;
         let oldString = randomString;
         while (randomString == oldString) {
             randomString = stringList[Math.floor(Math.random() * stringList.length)];
@@ -40,9 +44,17 @@
         <Typewriter mode="concurrent" keepCursorOnFinish="true">
             <h1 class="random-text">{randomString.quote}</h1>
         </Typewriter>
-        <Typewriter mode="concurrent" keepCursorOnFinish="true">
-            <h1 class="random-text">{randomString.author}</h1>
-        </Typewriter>
+        {#if spoiler}
+            <Typewriter mode="concurrent" keepCursorOnFinish="true">
+                <h1 id="spoiler-author" class="random-text" on:click={() => (spoiler = false)}>
+                    {randomString.author == '' ? '' : '> Click to Reveal <'}
+                </h1>
+            </Typewriter>
+        {:else}
+            <Typewriter mode="concurrent" keepCursorOnFinish="true">
+                <h1 class="random-text">{randomString.author}</h1>
+            </Typewriter>
+        {/if}
         <button class="random-button" on:click={selectRandomString}>Load Random Quote</button>
         <input
             id="new-quote-input"
@@ -86,6 +98,11 @@
         margin-top: 5px;
         margin-bottom: 10px;
         color: white;
+        cursor: default;
+    }
+
+    #spoiler-author {
+        cursor: pointer;
     }
 
     #new-quote-input {

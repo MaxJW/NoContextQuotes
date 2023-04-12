@@ -1,11 +1,27 @@
 <script lang="ts">
     import { scale } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
+
     export let stringList = [];
+
+    // Map of author names that should be combined to a single name
+    const authorMap = {
+        Matthew: 'Cube',
+        Alistair: 'Ali',
+        'Maximilian Joseph Williamson III': 'Max',
+        Grant: 'Hendo',
+    };
+
     // Use reduce() to count the occurrences of each author
     let authorCount, leaderboard;
     $: authorCount = stringList.reduce((count, { author }) => {
-        count[author] = (count[author] || 0) + 1;
+        // Split author name into separate authors if it contains a '&'
+        const authors = author.includes(' & ') ? author.split(' & ') : [author];
+        // Increment count for each author in the array
+        authors.forEach((auth) => {
+            const mappedAuthor = authorMap[auth] || auth;
+            count[mappedAuthor] = (count[mappedAuthor] || 0) + 1;
+        });
         return count;
     }, {});
 
@@ -23,8 +39,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="icon" on:click={toggleVisible}>
-    <!-- svelte-ignore a11y-missing-attribute -->
-    <img src="https://cdn-icons-png.flaticon.com/512/4489/4489655.png" />
+    <img src="https://cdn-icons-png.flaticon.com/512/4489/4489655.png" alt="Leaderboard button" />
 </div>
 
 {#if visible}
@@ -72,8 +87,8 @@
         left: 0;
         top: 90px;
         margin: 20px;
-        max-width: 300px;
-        max-height: 300px;
+        width: 250px;
+        height: 350px;
         overflow-y: scroll;
         border-radius: 6px;
         background-color: var(--background);

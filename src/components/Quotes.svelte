@@ -43,21 +43,23 @@
 
 <div class="quote_container">
     <div class="heading">
-        <Typewriter mode="concurrent" keepCursorOnFinish={true}>
-            <h1 class="random-text">{randomString.quote}</h1>
-        </Typewriter>
-        {#if spoiler}
-            <Typewriter mode="concurrent" cursor={false}>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <h1 id="spoiler-author" class="random-text" on:click={() => (spoiler = false)}>
-                    {randomString.author == '' ? '' : 'Click to Reveal'}
-                </h1>
+        <div class="typewriter-block">
+            <Typewriter mode="concurrent" keepCursorOnFinish={true}>
+                <h1 class="random-text">{randomString.quote}</h1>
             </Typewriter>
-        {:else}
-            <Typewriter mode="concurrent" cursor={false}>
-                <h1 class="random-text">{randomString.author}</h1>
-            </Typewriter>
-        {/if}
+            {#if spoiler}
+                <Typewriter mode="concurrent" cursor={false}>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <h1 id="spoiler-author" class="random-text" on:click={() => (spoiler = false)}>
+                        {randomString.author == '' ? '' : 'Click to Reveal'}
+                    </h1>
+                </Typewriter>
+            {:else}
+                <Typewriter mode="concurrent" cursor={false}>
+                    <h1 class="random-text">{randomString.author}</h1>
+                </Typewriter>
+            {/if}
+        </div>
         <button class="random-button" on:click={selectRandomString}>Load Random Quote</button>
         <input
             id="new-quote-input"
@@ -69,7 +71,7 @@
             id="new-quote-input-author"
             type="text"
             bind:value={newAuthor}
-            placeholder="Write the author of the quote here"
+            placeholder="Write quote author here. If multiple, separate with &"
         />
         <button class="random-button" on:click={addQuote}>Add Quote</button>
     </div>
@@ -93,6 +95,10 @@
         z-index: 1;
         padding-left: 10px;
         padding-right: 10px;
+    }
+
+    .typewriter-block {
+        min-height: 124px;
     }
 
     .heading {

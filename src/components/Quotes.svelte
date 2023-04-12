@@ -3,11 +3,11 @@
     import { doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
     import { toast } from '@zerodevx/svelte-toast';
     import Typewriter from 'svelte-typewriter';
+    import Leaderboard from './Leaderboard.svelte';
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
         stringList = doc.data().quote_list;
-        console.log(stringList);
     });
 
     let spoiler = true;
@@ -39,19 +39,22 @@
     }
 </script>
 
-<div class="profile">
+<Leaderboard {stringList} />
+
+<div class="quote_container">
     <div class="heading">
-        <Typewriter mode="concurrent" keepCursorOnFinish="true">
+        <Typewriter mode="concurrent" keepCursorOnFinish={true}>
             <h1 class="random-text">{randomString.quote}</h1>
         </Typewriter>
         {#if spoiler}
-            <Typewriter mode="concurrent" keepCursorOnFinish="true">
+            <Typewriter mode="concurrent" cursor={false}>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <h1 id="spoiler-author" class="random-text" on:click={() => (spoiler = false)}>
                     {randomString.author == '' ? '' : '> Click to Reveal <'}
                 </h1>
             </Typewriter>
         {:else}
-            <Typewriter mode="concurrent" keepCursorOnFinish="true">
+            <Typewriter mode="concurrent" cursor={false}>
                 <h1 class="random-text">{randomString.author}</h1>
             </Typewriter>
         {/if}
@@ -73,7 +76,10 @@
 </div>
 
 <style>
-    .profile {
+    h1 {
+        min-height: 56px;
+    }
+    .quote_container {
         position: fixed;
         display: flex;
         flex-direction: column;
@@ -85,6 +91,8 @@
         left: 0;
         right: 0;
         z-index: 1;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     .heading {

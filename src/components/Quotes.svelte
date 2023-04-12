@@ -50,7 +50,7 @@
             <Typewriter mode="concurrent" cursor={false}>
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <h1 id="spoiler-author" class="random-text" on:click={() => (spoiler = false)}>
-                    {randomString.author == '' ? '' : '> Click to Reveal <'}
+                    {randomString.author == '' ? '' : 'Click to Reveal'}
                 </h1>
             </Typewriter>
         {:else}

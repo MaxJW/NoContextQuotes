@@ -16,7 +16,9 @@
     let newAuthor = '';
 
     let stringList = [];
-    let randomString = { quote: '', author: '' };
+    let randomString = {};
+    randomString['quote'] = '';
+    randomString['author'] = '';
 
     function selectRandomString() {
         spoiler = true;
@@ -44,20 +46,26 @@
 <div class="quote_container">
     <div class="heading">
         <div class="typewriter-block">
-            <Typewriter mode="concurrent" keepCursorOnFinish={true}>
-                <h1 class="random-text">{randomString.quote}</h1>
-            </Typewriter>
-            {#if spoiler}
-                <Typewriter mode="concurrent" cursor={false}>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <h1 id="spoiler-author" class="random-text" on:click={() => (spoiler = false)}>
-                        {randomString.author == '' ? '' : 'Click to Reveal'}
-                    </h1>
+            {#if typeof randomString !== 'undefined'}
+                <Typewriter mode="concurrent" keepCursorOnFinish={true}>
+                    <h1 class="random-text">{randomString.quote}</h1>
                 </Typewriter>
-            {:else}
-                <Typewriter mode="concurrent" cursor={false}>
-                    <h1 class="random-text">{randomString.author}</h1>
-                </Typewriter>
+                {#if spoiler}
+                    <Typewriter mode="concurrent" cursor={false}>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <h1
+                            id="spoiler-author"
+                            class="random-text"
+                            on:click={() => (spoiler = false)}
+                        >
+                            {randomString.author == '' ? '' : 'Click to Reveal'}
+                        </h1>
+                    </Typewriter>
+                {:else}
+                    <Typewriter mode="concurrent" cursor={false}>
+                        <h1 class="random-text">{randomString.author}</h1>
+                    </Typewriter>
+                {/if}
             {/if}
         </div>
         <button class="random-button" on:click={selectRandomString}>Load Random Quote</button>

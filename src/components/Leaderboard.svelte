@@ -32,14 +32,18 @@
         .sort((a, b) => b.count - a.count);
 
     let visible = false;
+    let toggleIcon;
 
-    function toggleVisible() {
+    function toggleVisibility() {
         visible = !visible;
+        visible
+            ? (toggleIcon.style['pointer-events'] = 'none')
+            : (toggleIcon.style['pointer-events'] = 'all');
     }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="icon" on:click={toggleVisible}>
+<div class="icon" on:click={toggleVisibility} bind:this={toggleIcon}>
     <img src="https://cdn-icons-png.flaticon.com/512/4489/4489655.png" alt="Leaderboard button" />
 </div>
 
@@ -48,7 +52,7 @@
         class="leaderboard"
         transition:scale={{ duration: 250, opacity: 0.5, easing: quintOut }}
         use:clickOutside
-        on:click_outside={toggleVisible}
+        on:click_outside={toggleVisibility}
     >
         <caption>Leaderboard</caption>
         <tr>
@@ -76,7 +80,7 @@
         border-radius: 50%;
         display: flex;
         transition: box-shadow 0.25s ease-out;
-        z-index: 99;
+        z-index: 98;
     }
     .icon:hover {
         box-shadow: 0px 0px 15px rgb(255, 255, 255, 0.5);
@@ -99,7 +103,7 @@
         border-radius: 6px;
         background-color: var(--background);
         padding: 10px;
-        z-index: 98;
+        z-index: 99;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
     }
 

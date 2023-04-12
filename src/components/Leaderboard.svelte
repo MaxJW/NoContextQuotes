@@ -87,7 +87,7 @@
         left: 0;
         top: 90px;
         margin: 20px;
-        width: 250px;
+        width: auto;
         height: 350px;
         overflow-y: scroll;
         border-radius: 6px;
@@ -105,6 +105,7 @@
     }
     td {
         border: solid 2.5px var(--background-body);
+        max-width: 150px;
     }
     td:first-child {
         border-left: none;

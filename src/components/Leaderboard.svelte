@@ -1,6 +1,7 @@
 <script lang="ts">
     import { scale } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
+    import { clickOutside } from '../clickOutside.js';
 
     export let stringList = [];
 
@@ -43,7 +44,12 @@
 </div>
 
 {#if visible}
-    <table class="leaderboard" transition:scale={{ duration: 250, opacity: 0.5, easing: quintOut }}>
+    <table
+        class="leaderboard"
+        transition:scale={{ duration: 250, opacity: 0.5, easing: quintOut }}
+        use:clickOutside
+        on:click_outside={toggleVisible}
+    >
         <caption>Leaderboard</caption>
         <tr>
             <th>Author</th>

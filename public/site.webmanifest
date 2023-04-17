@@ -1,0 +1,32 @@
+{
+	"name": "No Context Quotes",
+	"short_name": "No Context",
+	"theme_color": "#13131c",
+	"background_color": "#13131c",
+	"display": "fullscreen",
+	"orientation": "portrait",
+	"scope": "https://context.maxwilson.co.uk/",
+	"start_url": "https://context.maxwilson.co.uk/",
+	"icons": [
+		{
+			"src": "/icons/icon-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/icons/icon-256x256.png",
+			"sizes": "256x256",
+			"type": "image/png"
+		},
+		{
+			"src": "/icons/icon-384x384.png",
+			"sizes": "384x384",
+			"type": "image/png"
+		},
+		{
+			"src": "/icons/icon-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}

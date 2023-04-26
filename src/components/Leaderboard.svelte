@@ -11,6 +11,7 @@
         Alistair: 'Ali',
         'Maximilian Joseph Williamson III': 'Max',
         Grant: 'Hendo',
+        Dov: 'David',
     };
 
     // Use reduce() to count the occurrences of each author

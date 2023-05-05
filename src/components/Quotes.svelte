@@ -30,7 +30,7 @@
 
     async function addQuote() {
         if (newQuote != '' && newAuthor != '') {
-            let quoteAuthor = { quote: newQuote, author: newAuthor };
+            let quoteAuthor = { quote: newQuote.trim(), author: newAuthor.trim() };
             toast.push('Submitting quote...');
             await updateDoc(docRef, { quote_list: arrayUnion(quoteAuthor) }).then(() => {
                 toast.push('Quote submitted!');

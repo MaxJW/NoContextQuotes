@@ -1,9 +1,11 @@
 <script lang="ts">
     import { db } from '../firebase.js';
-    import { doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
+    import { doc, getDoc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
     import { toast } from '@zerodevx/svelte-toast';
     import Typewriter from 'svelte-typewriter';
     import Leaderboard from './Leaderboard.svelte';
+
+    let stringList = [];
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
@@ -15,17 +17,19 @@
     let newQuote = '';
     let newAuthor = '';
 
-    let stringList = [];
-    let randomString = {};
-    randomString['quote'] = '';
-    randomString['author'] = '';
+    let randomQuote = { quote: '', author: '' };
+    let randomIndex = -1;
 
-    function selectRandomString() {
+    async function selectRandomQuote() {
         spoiler = true;
-        let oldString = randomString;
-        while (randomString == oldString) {
-            randomString = stringList[Math.floor(Math.random() * stringList.length)];
+        if (stringList.length === 0) {
+            const docSnapshot = await getDoc(docRef); // Fetch the document again
+            stringList = docSnapshot.data().quote_list;
         }
+        randomIndex = Math.floor(Math.random() * stringList.length); // Select a random index
+        randomQuote = stringList[randomIndex];
+        randomQuote.quote += ' ';
+        stringList.splice(randomIndex, 1); // Remove the selected quote from the list
     }
 
     async function addQuote() {
@@ -46,9 +50,9 @@
 <div class="quote_container">
     <div class="heading">
         <div class="typewriter-block">
-            {#if typeof randomString !== 'undefined'}
+            {#if typeof randomQuote !== 'undefined'}
                 <Typewriter mode="concurrent" keepCursorOnFinish={true}>
-                    <h1 class="random-text">{randomString.quote}</h1>
+                    <h1 class="random-text">{randomQuote.quote}</h1>
                 </Typewriter>
                 {#if spoiler}
                     <Typewriter mode="concurrent" cursor={false}>
@@ -58,17 +62,19 @@
                             class="random-text"
                             on:click={() => (spoiler = false)}
                         >
-                            {randomString.author == '' ? '' : 'Click to Reveal'}
+                            {randomQuote.author == '' ? '' : 'Click to Reveal'}
                         </h1>
                     </Typewriter>
                 {:else}
                     <Typewriter mode="concurrent" cursor={false}>
-                        <h1 class="random-text">{randomString.author}</h1>
+                        <h1 class="random-text">{randomQuote.author}</h1>
                     </Typewriter>
                 {/if}
             {/if}
         </div>
-        <button class="random-button" on:click={selectRandomString}>Load Random Quote</button>
+        <button class="random-button load-quote" on:click={selectRandomQuote}
+            >Load Random Quote</button
+        >
         <input
             id="new-quote-input"
             type="text"
@@ -86,6 +92,9 @@
 </div>
 
 <style>
+    :root {
+        --cursor-color: #ececf1;
+    }
     h1 {
         min-height: 56px;
     }
@@ -143,7 +152,10 @@
         max-width: 90vw;
     }
 
-    /* CSS */
+    .load-quote {
+        margin-top: 20px;
+    }
+
     .random-button {
         align-items: center;
         appearance: none;

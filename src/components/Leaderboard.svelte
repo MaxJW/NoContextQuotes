@@ -5,16 +5,6 @@
 
     export let stringList = [];
 
-    // Map of author names that should be combined to a single name
-    const authorMap = {
-        Matthew: 'Cube',
-        Alistair: 'Ali',
-        'Maximilian Joseph Williamson III': 'Max',
-        Grant: 'Hendo',
-        Dov: 'David',
-        'Matty G': 'Matthew G',
-    };
-
     // Use reduce() to count the occurrences of each author
     let authorCount, leaderboard;
     $: authorCount = stringList.reduce((count, { author }) => {
@@ -22,7 +12,7 @@
         const authors = author.includes(' & ') ? author.split(' & ') : [author];
         // Increment count for each author in the array
         authors.forEach((auth) => {
-            const mappedAuthor = authorMap[auth] || auth;
+            const mappedAuthor = auth;
             count[mappedAuthor] = (count[mappedAuthor] || 0) + 1;
         });
         return count;

@@ -1,15 +1,20 @@
 <script lang="ts">
+    import Fa from 'svelte-fa';
+    import { faCirclePlus, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+    import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
     import { db } from '../firebase.js';
     import { doc, getDoc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
     import { toast } from '@zerodevx/svelte-toast';
     import Typewriter from 'svelte-typewriter';
     import Leaderboard from './Leaderboard.svelte';
+    import { fade } from 'svelte/transition';
 
     let stringList = [];
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
         stringList = doc.data().quote_list;
+        search();
     });
 
     let spoiler = true;
@@ -43,53 +48,138 @@
             });
         }
     }
+
+    let searchString = '';
+    let selectedAuthor = '';
+    let searchResults = [];
+    let showNoResults = false;
+
+    function search() {
+        searchResults = stringList.filter((quote) => {
+            const lowercaseSearch = searchString.toLowerCase();
+            const lowercaseQuote = quote.quote.toLowerCase();
+            const lowercaseAuthor = quote.author.toLowerCase();
+
+            const authors = lowercaseAuthor.split(/[&,]/).map((author) => author.trim());
+
+            return (
+                (lowercaseQuote.includes(lowercaseSearch) ||
+                    lowercaseAuthor.includes(lowercaseSearch)) &&
+                (selectedAuthor === '' || authors.includes(selectedAuthor.toLowerCase()))
+            );
+        });
+
+        searchResults.reverse();
+        showNoResults = searchResults.length === 0;
+    }
+
+    function filterByAuthor(event) {
+        selectedAuthor = event.target.value;
+        search();
+    }
+
+    function resetSearch() {
+        searchString = '';
+    }
 </script>
 
-<Leaderboard {stringList} />
+<Tabs>
+    <TabList>
+        <Tab><Fa icon={faHome} size="lg" /></Tab>
+        <Tab><Fa icon={faCirclePlus} size="lg" /></Tab>
+        <Tab><Fa icon={faSearch} size="lg" /></Tab>
+    </TabList>
 
-<div class="quote_container">
-    <div class="heading">
-        <div class="typewriter-block">
-            {#if typeof randomQuote !== 'undefined'}
-                <Typewriter mode="concurrent" keepCursorOnFinish={true}>
-                    <h1 class="random-text">{randomQuote.quote}</h1>
-                </Typewriter>
-                {#if spoiler}
-                    <Typewriter mode="concurrent" cursor={false}>
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <h1
-                            id="spoiler-author"
-                            class="random-text"
-                            on:click={() => (spoiler = false)}
-                        >
-                            {randomQuote.author == '' ? '' : 'Click to Reveal'}
-                        </h1>
-                    </Typewriter>
-                {:else}
-                    <Typewriter mode="concurrent" cursor={false}>
-                        <h1 class="random-text">{randomQuote.author}</h1>
-                    </Typewriter>
+    <TabPanel>
+        <div class="parent-div quotes" transition:fade={{ duration: 100 }}>
+            <Leaderboard {stringList} />
+            <div class="heading">
+                <div class="typewriter-block">
+                    {#if typeof randomQuote !== 'undefined'}
+                        <Typewriter mode="concurrent" keepCursorOnFinish={true}>
+                            <h1 class="random-text">{randomQuote.quote}</h1>
+                        </Typewriter>
+                        {#if spoiler}
+                            <Typewriter mode="concurrent" cursor={false}>
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <h1
+                                    id="spoiler-author"
+                                    class="random-text"
+                                    on:click={() => (spoiler = false)}
+                                >
+                                    {randomQuote.author == '' ? '' : 'Click to Reveal'}
+                                </h1>
+                            </Typewriter>
+                        {:else}
+                            <Typewriter mode="concurrent" cursor={false}>
+                                <h1 class="random-text">{randomQuote.author}</h1>
+                            </Typewriter>
+                        {/if}
+                    {/if}
+                </div>
+                <button class="random-button load-quote" on:click={selectRandomQuote}
+                    >Load Random Quote</button
+                >
+            </div>
+        </div>
+    </TabPanel>
+
+    <TabPanel>
+        <div class="parent-div quotes" transition:fade={{ duration: 100 }}>
+            <input
+                id="new-quote-input"
+                type="text"
+                bind:value={newQuote}
+                placeholder="Submit a new quote here"
+            />
+            <input
+                id="new-quote-input-author"
+                type="text"
+                bind:value={newAuthor}
+                placeholder="Write quote author here. If multiple, separate with &"
+            />
+            <button class="random-button" on:click={addQuote}>Add Quote</button>
+        </div>
+    </TabPanel>
+
+    <TabPanel>
+        <div class="parent-div search" transition:fade={{ duration: 100 }}>
+            <h2>Search</h2>
+            <div class="search-container">
+                <input type="text" bind:value={searchString} placeholder="Search..." />
+                {#if searchString}
+                    <button class="clear-button" on:click={resetSearch}>
+                        <span>&times;</span>
+                    </button>
                 {/if}
+                <button class="random-button" on:click={search}>Search</button>
+            </div>
+            <select bind:value={selectedAuthor} on:change={filterByAuthor}>
+                <option value="">All Authors</option>
+                {#each Array.from(new Set(stringList.map((quote) => quote.author)))
+                    .filter((author) => !author.includes('&'))
+                    .sort((a, b) => a.localeCompare(b)) as author}
+                    <option value={author}>{author}</option>
+                {/each}
+            </select>
+
+            {#if showNoResults}
+                <ul class="quote-list">
+                    <li>No results found.</li>
+                </ul>
+            {:else}
+                <ul class="quote-list">
+                    {#each searchResults as quote, index}
+                        <li>
+                            <span class="quote">{quote.quote}</span>
+                            <span class="author">{quote.author}</span>
+                        </li>
+                    {/each}
+                </ul>
             {/if}
         </div>
-        <button class="random-button load-quote" on:click={selectRandomQuote}
-            >Load Random Quote</button
-        >
-        <input
-            id="new-quote-input"
-            type="text"
-            bind:value={newQuote}
-            placeholder="Submit a new quote here"
-        />
-        <input
-            id="new-quote-input-author"
-            type="text"
-            bind:value={newAuthor}
-            placeholder="Write quote author here. If multiple, separate with &"
-        />
-        <button class="random-button" on:click={addQuote}>Add Quote</button>
-    </div>
-</div>
+    </TabPanel>
+</Tabs>
 
 <style>
     :root {
@@ -98,20 +188,27 @@
     h1 {
         min-height: 56px;
     }
-    .quote_container {
+
+    .parent-div {
         position: fixed;
         display: flex;
         flex-direction: column;
         max-width: fit-content;
-        justify-content: center;
         margin: 0 auto;
-        height: 100vh;
+        height: 95vh;
         top: 0;
         left: 0;
         right: 0;
-        z-index: 1;
         padding-left: 10px;
         padding-right: 10px;
+    }
+
+    .parent-div.quotes {
+        justify-content: center;
+    }
+
+    .parent-div.search {
+        justify-content: flex-start;
     }
 
     .typewriter-block {
@@ -147,7 +244,7 @@
     #new-quote-input-author {
         margin: 0 auto;
         margin-top: 5px;
-        margin-bottom: 10px;
+        margin-bottom: 50px;
         width: 500px;
         max-width: 90vw;
     }
@@ -225,5 +322,104 @@
 
     .random-button:disabled {
         box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0, rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+    }
+
+    /* Tabs Styling */
+    /* Tabs Container */
+    :global(.svelte-tabs) {
+        display: flex;
+        width: 100%;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: 90;
+    }
+    :global(.svelte-tabs ul.svelte-tabs__tab-list) {
+        border-top: 1px solid #32324a;
+        border-bottom: 0;
+        display: flex;
+        width: 100%;
+        z-index: 99;
+    }
+    /* Tab */
+    :global(.svelte-tabs li.svelte-tabs__tab) {
+        width: 100%;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    :global(.svelte-tabs li.svelte-tabs__tab:focus) {
+        outline: none;
+    }
+    /* Selected Tab */
+    :global(.svelte-tabs li.svelte-tabs__selected) {
+        border-bottom: 2px solid #7474a1;
+    }
+    /* Tab Panel */
+    :global(.svelte-tabs div.svelte-tabs__tab-panel) {
+    }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        width: 500px;
+        max-width: 90vw;
+    }
+
+    .search-container input {
+        width: 500px;
+        max-width: 90vw;
+        margin-right: 10px;
+    }
+
+    .search-container button {
+        margin-left: 10px;
+    }
+
+    .quote-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: 10px;
+        overflow-y: scroll;
+        height: 80vh;
+        width: 500px;
+        max-width: 90vw;
+    }
+
+    .quote-list li {
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
+
+    .quote-list li .quote {
+        font-weight: bold;
+        display: block;
+    }
+
+    .quote-list li .author {
+        display: block;
+        color: #d8d8d8;
+    }
+
+    .clear-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+    }
+
+    .clear-button span {
+        color: #999;
+        font-size: 16px;
+        line-height: 1;
     }
 </style>

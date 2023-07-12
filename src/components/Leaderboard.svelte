@@ -12,7 +12,7 @@
         'Maximilian Joseph Williamson III': 'Max',
         Grant: 'Hendo',
         Dov: 'David',
-        'Matty G': 'Matthew G'
+        'Matty G': 'Matthew G',
     };
 
     // Use reduce() to count the occurrences of each author
@@ -45,7 +45,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="icon" on:click={toggleVisibility} bind:this={toggleIcon}>
+<div class="icon" on:click={toggleVisibility} bind:this={toggleIcon} transition:scale>
     <img src="https://cdn-icons-png.flaticon.com/512/4489/4489655.png" alt="Leaderboard button" />
 </div>
 
@@ -74,7 +74,7 @@
     .icon {
         width: 70px;
         height: 70px;
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         margin: 20px;
@@ -95,7 +95,7 @@
 
     .leaderboard {
         display: block;
-        position: absolute;
+        position: fixed;
         left: 0;
         top: 90px;
         margin: 20px;

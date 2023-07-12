@@ -195,7 +195,7 @@
         flex-direction: column;
         max-width: fit-content;
         margin: 0 auto;
-        height: 95vh;
+        height: 90vh;
         top: 0;
         left: 0;
         right: 0;

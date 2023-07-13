@@ -1,28 +1,38 @@
 <script lang="ts">
+    import { auth } from './firebase';
+    import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
     import Quotes from './components/Quotes.svelte';
     import { SvelteToast } from '@zerodevx/svelte-toast';
 
-    let password = '';
-    const hash = (s) =>
-        s.split('').reduce((a, b) => {
-            a = (a << 5) - a + b.charCodeAt(0);
-            return a & a;
-        }, 0);
+    const provider = new GoogleAuthProvider();
+    let user = auth.currentUser;
+    auth.onAuthStateChanged((u) => {
+        user = u;
+    });
+    function login() {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                user = result.user;
+            })
+            .catch((error) => {
+                console.log(error.code, error.message);
+            });
+    }
 </script>
 
-{#if hash(password) === 1252560117}
+{#if user}
     <Quotes />
 {:else}
-    <div id="password-container">
-        <label for="password">Password:</label>
-        <input id="password" bind:value={password} type="password" />
+    <div id="login-container">
+        <button on:click={login} id="login" class="custom-button"> Sign In with Google </button>
+        <p>(This means no more typing in a password)</p>
     </div>
 {/if}
 
 <SvelteToast />
 
 <style>
-    #password-container {
+    #login-container {
         position: fixed;
         display: flex;
         flex-direction: column;
@@ -37,16 +47,11 @@
         text-align: center;
     }
 
-    #password-container label {
-        font-size: 2.5rem;
-        font-weight: 500;
-        margin-top: 5px;
-        margin-bottom: 10px;
-        color: white;
-        cursor: default;
+    #login-container p {
+        opacity: 0.6;
     }
 
-    #password {
+    #login {
         margin: 0 auto;
         margin-top: 10px;
         width: 500px;

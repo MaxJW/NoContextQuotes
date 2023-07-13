@@ -275,6 +275,7 @@
         width: 100%;
         z-index: 99;
         background-color: #13131c;
+        padding-bottom: env(safe-area-inset-bottom);
     }
     /* Tab */
     :global(.svelte-tabs li.svelte-tabs__tab) {
@@ -284,7 +285,6 @@
         justify-content: center;
         align-items: center;
         padding: 12px;
-        padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
     }
     :global(.svelte-tabs li.svelte-tabs__tab:focus) {
         outline: none;

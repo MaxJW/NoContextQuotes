@@ -333,6 +333,7 @@
         left: 0;
         bottom: 0;
         z-index: 90;
+        background-color: #13131c;
     }
     :global(.svelte-tabs ul.svelte-tabs__tab-list) {
         border-top: 1px solid #32324a;
@@ -348,6 +349,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 12px;
+        padding-bottom: 14px;
     }
     :global(.svelte-tabs li.svelte-tabs__tab:focus) {
         outline: none;

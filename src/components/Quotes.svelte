@@ -284,7 +284,7 @@
         justify-content: center;
         align-items: center;
         padding: 12px;
-        padding-bottom: 14px;
+        padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
     }
     :global(.svelte-tabs li.svelte-tabs__tab:focus) {
         outline: none;

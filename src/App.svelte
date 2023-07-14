@@ -5,8 +5,10 @@
     import { SvelteToast } from '@zerodevx/svelte-toast';
 
     const provider = new GoogleAuthProvider();
-    let user = auth.currentUser;
+    let user = null;
+    let loading = true;
     auth.onAuthStateChanged((u) => {
+        loading = false;
         user = u;
     });
     function login() {
@@ -27,7 +29,11 @@
         }, 0);
 </script>
 
-{#if user || hash(password) === 1252560117}
+{#if loading}
+    <div id="login-container">
+        <span class="loader" />
+    </div>
+{:else if user || hash(password) === 1252560117}
     <Quotes />
 {:else}
     <div id="login-container">
@@ -82,5 +88,25 @@
         margin-top: 10px;
         width: 500px;
         max-width: 90vw;
+    }
+
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #fff;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>

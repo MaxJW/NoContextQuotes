@@ -90,6 +90,9 @@
         });
         searchResults.reverse();
         showNoResults = searchResults.length === 0;
+        if (document.getElementById('quote-search') !== null) {
+            document.getElementById('quote-search').scrollTop = 0;
+        }
     }
 
     function filterByAuthor(event) {
@@ -188,7 +191,7 @@
                     <li>No results found.</li>
                 </ul>
             {:else}
-                <ul class="quote-list">
+                <ul id="quote-search" class="quote-list">
                     {#each searchResults as quote, index}
                         <li>
                             <span class="quote">{quote.quote}</span>

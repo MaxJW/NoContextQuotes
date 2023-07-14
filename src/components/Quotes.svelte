@@ -9,15 +9,18 @@
     import Leaderboard from './Leaderboard.svelte';
     import { fade } from 'svelte/transition';
 
+    let fullQuoteList = [];
     let stringList = [];
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
-        if (stringList !== doc.data().quote_list) {
-            let tempLength = stringList.length;
-            stringList = doc.data().quote_list;
+        console.log('[NC Log] New snapshot found');
+        if (fullQuoteList !== doc.data().quote_list) {
+            let tempLength = fullQuoteList.length;
+            fullQuoteList = doc.data().quote_list;
+            stringList = fullQuoteList.slice();
             if (tempLength !== 0) {
-                new Notification('New Quote Added', { body: stringList.at(-1).quote });
+                new Notification('New Quote Added', { body: fullQuoteList.at(-1).quote });
             }
         }
         search();
@@ -42,8 +45,10 @@
     async function selectRandomQuote() {
         spoiler = true;
         if (stringList.length === 0) {
+            console.log('[NC Log] Reached end of list, fetching again');
             const docSnapshot = await getDoc(docRef); // Fetch the document again
-            stringList = docSnapshot.data().quote_list;
+            fullQuoteList = docSnapshot.data().quote_list;
+            stringList = fullQuoteList.slice();
         }
         randomIndex = Math.floor(Math.random() * stringList.length); // Select a random index
         randomQuote = stringList[randomIndex];
@@ -56,6 +61,7 @@
             let quoteAuthor = { quote: newQuote.trim(), author: newAuthor.trim() };
             toast.push('Submitting quote...');
             await updateDoc(docRef, { quote_list: arrayUnion(quoteAuthor) }).then(() => {
+                console.log('[NC Log] Added new quote to database');
                 toast.push('Quote submitted!');
                 newQuote = '';
                 newAuthor = '';
@@ -69,7 +75,7 @@
     let showNoResults = false;
 
     function search() {
-        searchResults = stringList.filter((quote) => {
+        searchResults = fullQuoteList.filter((quote) => {
             const lowercaseSearch = searchString.toLowerCase();
             const lowercaseQuote = quote.quote.toLowerCase();
             const lowercaseAuthor = quote.author.toLowerCase();
@@ -105,7 +111,7 @@
 
     <TabPanel>
         <div class="parent-div quotes" transition:fade={{ duration: 100 }}>
-            <Leaderboard {stringList} />
+            <Leaderboard {fullQuoteList} />
             <div class="heading">
                 <div class="typewriter-block">
                     {#if typeof randomQuote !== 'undefined'}

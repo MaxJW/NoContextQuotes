@@ -3,11 +3,11 @@
     import { quintOut } from 'svelte/easing';
     import { clickOutside } from '../clickOutside.js';
 
-    export let stringList = [];
+    export let fullQuoteList = [];
 
     // Use reduce() to count the occurrences of each author
     let authorCount, leaderboard;
-    $: authorCount = stringList.reduce((count, { author }) => {
+    $: authorCount = fullQuoteList.reduce((count, { author }) => {
         // Split author name into separate authors if it contains a '&'
         const authors = author.includes(' & ') ? author.split(' & ') : [author];
         // Increment count for each author in the array

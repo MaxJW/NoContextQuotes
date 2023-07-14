@@ -13,7 +13,13 @@
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
-        stringList = doc.data().quote_list;
+        if (stringList !== doc.data().quote_list) {
+            let tempLength = stringList.length;
+            stringList = doc.data().quote_list;
+            if (tempLength !== 0) {
+                new Notification('New Quote Added', { body: stringList.at(-1).quote });
+            }
+        }
         search();
     });
 
@@ -24,6 +30,14 @@
 
     let randomQuote = { quote: '', author: '' };
     let randomIndex = -1;
+
+    if (
+        'Notification' in window &&
+        Notification.permission !== 'denied' &&
+        Notification.permission !== 'granted'
+    ) {
+        Notification.requestPermission();
+    }
 
     async function selectRandomQuote() {
         spoiler = true;
@@ -68,7 +82,6 @@
                 (selectedAuthor === '' || authors.includes(selectedAuthor.toLowerCase()))
             );
         });
-
         searchResults.reverse();
         showNoResults = searchResults.length === 0;
     }

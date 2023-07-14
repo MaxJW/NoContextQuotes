@@ -6,7 +6,7 @@
 	"display": "standalone",
 	"orientation": "portrait",
 	"scope": "https://context.maxwilson.co.uk/",
-	"start_url": "https://context.maxwilson.co.uk/",
+	"start_url": "/",
 	"icons": [
 		{
 			"src": "/icons/icon-192x192.png",

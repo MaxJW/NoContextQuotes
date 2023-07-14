@@ -27,7 +27,7 @@
         }, 0);
 </script>
 
-{#if !user || hash(password) === 1252560117}
+{#if user || hash(password) === 1252560117}
     <Quotes />
 {:else}
     <div id="login-container">

@@ -339,6 +339,7 @@
         margin: 0;
         margin-top: 10px;
         overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
         height: 80vh;
         width: 500px;
         max-width: 90vw;

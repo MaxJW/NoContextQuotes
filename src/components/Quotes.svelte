@@ -1,6 +1,11 @@
 <script lang="ts">
     import Fa from 'svelte-fa';
-    import { faCirclePlus, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+    import {
+        faCirclePlus,
+        faHome,
+        faSearch,
+        faChartSimple,
+    } from '@fortawesome/free-solid-svg-icons';
     import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
     import { db } from '../firebase.js';
     import { doc, getDoc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
@@ -111,6 +116,7 @@
         <Tab><Fa icon={faHome} size="lg" /></Tab>
         <Tab><Fa icon={faCirclePlus} size="lg" /></Tab>
         <Tab><Fa icon={faSearch} size="lg" /></Tab>
+        <Tab><Fa icon={faChartSimple} size="lg" /></Tab>
     </TabList>
 
     <TabPanel>
@@ -201,6 +207,17 @@
                     {/each}
                 </ul>
             {/if}
+        </div>
+    </TabPanel>
+
+    <TabPanel>
+        <div class="parent-div quotes" transition:fade={{ duration: 100 }}>
+            <h2 class="center-header">2023 No Context Champions</h2>
+            <ul class="quote-list award-list">
+                <li>Blair & Ali - 54</li>
+                <li>Ross - 47</li>
+                <li>Ewan - 36</li>
+            </ul>
         </div>
     </TabPanel>
 </Tabs>
@@ -364,6 +381,25 @@
     .quote-list li .author {
         display: block;
         color: #d8d8d8;
+    }
+
+    .award-list {
+        overflow-y: auto;
+    }
+
+    .award-list li {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .award-list li:nth-child(1) {
+        color: gold;
+    }
+    .award-list li:nth-child(2) {
+        color: rgb(167, 167, 173);
+    }
+    .award-list li:nth-child(3) {
+        color: rgb(167, 112, 68);
     }
 
     .clear-button {

@@ -104,19 +104,6 @@
     function resetSearch() {
         searchString = '';
     }
-
-    onMount(() => {
-        toast.push(
-            "IMPORTANT: Reading past quotes has been disabled in preparation for The Woody's. You can still submit new ones though!",
-            {
-                theme: {
-                    '--toastBackground': 'red',
-                    '--toastColor': 'white',
-                    '--toastBarBackground': 'white',
-                },
-            },
-        );
-    });
 </script>
 
 <Tabs>

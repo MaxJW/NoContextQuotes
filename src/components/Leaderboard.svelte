@@ -1,4 +1,5 @@
 <script lang="ts">
+    // @ts-nocheck - Used to ignore `click_outside` error below
     import { scale } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
     import { clickOutside } from '../clickOutside.js';
@@ -21,7 +22,7 @@
     // Convert the author count object to an array of objects and sort it in descending order
     $: leaderboard = Object.entries(authorCount)
         .map(([author, count]) => ({ author, count }))
-        .sort((a, b) => b.count - a.count);
+        .sort((a, b) => (b.count as number) - (a.count as number));
 
     let visible = false;
     let toggleIcon;

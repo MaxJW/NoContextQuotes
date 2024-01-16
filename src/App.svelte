@@ -7,10 +7,12 @@
     const provider = new GoogleAuthProvider();
     let user = null;
     let loading = true;
+
     auth.onAuthStateChanged((u) => {
         loading = false;
         user = u;
     });
+
     function login() {
         signInWithPopup(auth, provider)
             .then((result) => {

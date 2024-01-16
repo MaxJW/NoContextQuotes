@@ -34,7 +34,7 @@
         if (stringList.length === 0) {
             resetStringList();
         }
-
+        spoiler = true;
         randomQuote = stringList.pop(); // Pop the last element from the shuffled array
         randomQuote.quote += ' ';
         voted = checkVoteStatus();

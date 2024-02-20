@@ -10,7 +10,8 @@
 
     async function addQuote() {
         if (newQuote != '' && newAuthor != '') {
-            let quoteAuthor = { quote: newQuote.trim(), author: newAuthor.trim() };
+            let now = new Date();
+            let quoteAuthor = { quote: newQuote.trim(), author: newAuthor.trim(), datetime: now };
             toast.push('🔃 Submitting quote...');
             await updateDoc(docRef, { quote_list: arrayUnion(quoteAuthor) }).then(() => {
                 console.log('[NC Log] Added new quote to database');

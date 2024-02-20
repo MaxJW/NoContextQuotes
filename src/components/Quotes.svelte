@@ -17,7 +17,6 @@
     import PastWinners from './tabs/PastWinners.svelte';
     import { toast } from '@zerodevx/svelte-toast';
     import { onMount } from 'svelte';
-    import { get } from 'svelte/store';
 
     let fullQuoteList = [];
     let search = () => {};
@@ -35,7 +34,6 @@
         }
     });
 
-    //get doc
     const triggerStartupNotification = async () => {
         const docSnap = await getDoc(doc(db, 'notifications', 'startup_notif'));
         if (docSnap.exists()) {

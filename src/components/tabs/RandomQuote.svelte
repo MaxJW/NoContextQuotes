@@ -1,11 +1,12 @@
 <script lang="ts">
-    import { ThumbsUp, ThumbsDown } from 'lucide-svelte';
-    import { auth } from '../../firebase';
-    import { updateDoc } from 'firebase/firestore';
+    import ThumbsUp from 'lucide-svelte/icons/thumbs-up';
+    import ThumbsDown from 'lucide-svelte/icons/thumbs-down';
+    import { toast } from '@zerodevx/svelte-toast';
+    import { fade } from 'svelte/transition';
     import Typewriter from 'svelte-typewriter';
     import Leaderboard from '../Leaderboard.svelte';
-    import { fade } from 'svelte/transition';
-    import { toast } from '@zerodevx/svelte-toast';
+    import { auth } from '../../firebase';
+    import { updateDoc } from 'firebase/firestore';
 
     export let docRef;
     export let fullQuoteList = [];

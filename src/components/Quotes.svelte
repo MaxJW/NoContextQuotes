@@ -1,5 +1,9 @@
 <script lang="ts">
-    import { MessageCirclePlus, Home, SearchIcon, LineChart, Crown } from 'lucide-svelte';
+    import MessageCirclePlus from 'lucide-svelte/icons/message-circle-plus';
+    import Home from 'lucide-svelte/icons/home';
+    import SearchIcon from 'lucide-svelte/icons/search';
+    import LineChart from 'lucide-svelte/icons/line-chart';
+    import Crown from 'lucide-svelte/icons/crown';
     import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
     import { auth, db } from '../firebase.js';
     import { doc, onSnapshot, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';

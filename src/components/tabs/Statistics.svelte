@@ -78,11 +78,31 @@
                         time: {
                             unit: 'day',
                         },
+                        ticks: {
+                            color: 'white',
+                        },
                     },
                     y: {
                         title: {
                             display: true,
                             text: 'Total Quotes',
+                            color: 'white',
+                        },
+                        ticks: {
+                            color: 'white',
+                        },
+                    },
+                },
+                elements: {
+                    point: {
+                        radius: 5,
+                        hitRadius: 3,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white',
                         },
                     },
                 },

@@ -4,7 +4,8 @@
         faCirclePlus,
         faHome,
         faSearch,
-        faChartSimple,
+        faChartLine,
+        faTrophy,
     } from '@fortawesome/free-solid-svg-icons';
 
     import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
@@ -14,15 +15,16 @@
     import RandomQuote from './tabs/RandomQuote.svelte';
     import SubmitQuote from './tabs/SubmitQuote.svelte';
     import Search from './tabs/Search.svelte';
-    import PastWinners from './tabs/PastWinners.svelte';
+    import Statistics from './tabs/Statistics.svelte';
     import { toast } from '@zerodevx/svelte-toast';
     import { onMount } from 'svelte';
+    import Winners from './tabs/Winners.svelte';
 
     let fullQuoteList = [];
-    let search = () => {};
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
+        console.log(doc.data());
         console.log('[NC Log] New snapshot found');
         if (fullQuoteList !== doc.data().quote_list) {
             let tempLength = fullQuoteList.length;
@@ -30,7 +32,6 @@
             if (tempLength < fullQuoteList.length && tempLength !== 0) {
                 new Notification('New Quote Added', { body: fullQuoteList.at(-1).quote });
             }
-            search();
         }
     });
 
@@ -80,11 +81,12 @@
         <Tab><Fa icon={faHome} size="lg" /></Tab>
         <Tab><Fa icon={faCirclePlus} size="lg" /></Tab>
         <Tab><Fa icon={faSearch} size="lg" /></Tab>
-        <Tab><Fa icon={faChartSimple} size="lg" /></Tab>
+        <Tab><Fa icon={faChartLine} size="lg" /></Tab>
+        <Tab><Fa icon={faTrophy} size="lg" /></Tab>
     </TabList>
 
     <TabPanel>
-        <RandomQuote {docRef} bind:fullQuoteList />
+        <RandomQuote {docRef} {fullQuoteList} />
     </TabPanel>
 
     <TabPanel>
@@ -92,11 +94,15 @@
     </TabPanel>
 
     <TabPanel>
-        <Search bind:fullQuoteList bind:search />
+        <Search {fullQuoteList} />
     </TabPanel>
 
     <TabPanel>
-        <PastWinners />
+        <Statistics {fullQuoteList} />
+    </TabPanel>
+
+    <TabPanel>
+        <Winners />
     </TabPanel>
 </Tabs>
 

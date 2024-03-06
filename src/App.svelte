@@ -22,28 +22,17 @@
                 console.log(error.code, error.message);
             });
     }
-
-    let password = '';
-    const hash = (s) =>
-        s.split('').reduce((a, b) => {
-            a = (a << 5) - a + b.charCodeAt(0);
-            return a & a;
-        }, 0);
 </script>
 
 {#if loading}
     <div id="login-container">
         <span class="loader" />
     </div>
-{:else if user || hash(password) === 1252560117}
+{:else if user}
     <Quotes />
 {:else}
     <div id="login-container">
         <button on:click={login} id="login" class="custom-button"> Sign In with Google </button>
-        <p>(This means no more typing in a password each time)</p>
-        <h1>OR</h1>
-        <label for="password">Password:</label>
-        <input id="password" bind:value={password} type="password" />
     </div>
 {/if}
 
@@ -65,27 +54,7 @@
         text-align: center;
     }
 
-    #login-container p {
-        opacity: 0.6;
-    }
-
     #login {
-        margin: 0 auto;
-        margin-top: 10px;
-        width: 500px;
-        max-width: 90vw;
-    }
-
-    #login-container label {
-        font-size: 2.5rem;
-        font-weight: 500;
-        margin-top: 5px;
-        margin-bottom: 10px;
-        color: white;
-        cursor: default;
-    }
-
-    #password {
         margin: 0 auto;
         margin-top: 10px;
         width: 500px;

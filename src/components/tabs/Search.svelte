@@ -9,7 +9,9 @@
     let searchResults = [];
     let showNoResults = false;
 
-    export function search() {
+    $: fullQuoteList, search();
+
+    function search() {
         console.log('[NC Log] Searching');
         searchResults = fullQuoteList.filter((quote) => {
             const lowercaseSearch = searchString.toLowerCase();

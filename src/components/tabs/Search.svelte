@@ -17,9 +17,7 @@
             const lowercaseSearch = searchString.toLowerCase();
             const lowercaseQuote = quote.quote.toLowerCase();
             const lowercaseAuthor = quote.author.toLowerCase();
-
             const authors = lowercaseAuthor.split(/[&,]/).map((author) => author.trim());
-
             return (
                 (lowercaseQuote.includes(lowercaseSearch) ||
                     lowercaseAuthor.includes(lowercaseSearch)) &&

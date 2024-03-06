@@ -1,13 +1,5 @@
 <script lang="ts">
-    import Fa from 'svelte-fa';
-    import {
-        faCirclePlus,
-        faHome,
-        faSearch,
-        faChartLine,
-        faTrophy,
-    } from '@fortawesome/free-solid-svg-icons';
-
+    import { MessageCirclePlus, Home, SearchIcon, LineChart, Crown } from 'lucide-svelte';
     import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
     import { auth, db } from '../firebase.js';
     import { doc, onSnapshot, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -24,7 +16,6 @@
 
     const docRef = doc(db, 'quotes', 'quote_list');
     const unsub = onSnapshot(docRef, (doc) => {
-        console.log(doc.data());
         console.log('[NC Log] New snapshot found');
         if (fullQuoteList !== doc.data().quote_list) {
             let tempLength = fullQuoteList.length;
@@ -78,11 +69,11 @@
 
 <Tabs>
     <TabList>
-        <Tab><Fa icon={faHome} size="lg" /></Tab>
-        <Tab><Fa icon={faCirclePlus} size="lg" /></Tab>
-        <Tab><Fa icon={faSearch} size="lg" /></Tab>
-        <Tab><Fa icon={faChartLine} size="lg" /></Tab>
-        <Tab><Fa icon={faTrophy} size="lg" /></Tab>
+        <Tab><Home size={28} /></Tab>
+        <Tab><SearchIcon size={28} /></Tab>
+        <Tab><MessageCirclePlus size={28} /></Tab>
+        <Tab><LineChart size={28} /></Tab>
+        <Tab><Crown size={28} /></Tab>
     </TabList>
 
     <TabPanel>
@@ -90,11 +81,11 @@
     </TabPanel>
 
     <TabPanel>
-        <SubmitQuote {docRef} />
+        <Search {fullQuoteList} />
     </TabPanel>
 
     <TabPanel>
-        <Search {fullQuoteList} />
+        <SubmitQuote {docRef} />
     </TabPanel>
 
     <TabPanel>
@@ -145,9 +136,6 @@
     /* Selected Tab */
     :global(.svelte-tabs li.svelte-tabs__selected) {
         border-bottom: 2px solid #7474a1;
-    }
-    /* Tab Panel */
-    :global(.svelte-tabs div.svelte-tabs__tab-panel) {
-        /* Intentionally left blank */
+        background-color: #1e1e27;
     }
 </style>

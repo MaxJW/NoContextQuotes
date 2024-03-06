@@ -2,7 +2,7 @@
     import { auth } from './firebase';
     import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
     import Quotes from './components/Quotes.svelte';
-    import { SvelteToast } from '@zerodevx/svelte-toast';
+    import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 
     const provider = new GoogleAuthProvider();
     let user = null;
@@ -20,6 +20,10 @@
             })
             .catch((error) => {
                 console.log(error.code, error.message);
+                toast.push(
+                    '⚠️ Unable to authenticate with Google. Please try again or report this!',
+                );
+                toast.push(`⚠️ Error ${error.code}: ${error.message}`);
             });
     }
 </script>

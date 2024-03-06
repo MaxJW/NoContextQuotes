@@ -21,11 +21,10 @@
 
     function createChart() {
         fullQuoteList.forEach((quote) => {
-            let authors = quote.author.split(/[&,]/);
+            let authors = quote.author.split(/[&,]/).map((author) => author.trim());
             let datetime = quote.datetime ? quote.datetime.seconds * 1000 : chartStartDate;
 
             authors.forEach((author) => {
-                author = author.trim();
                 if (!authorsData[author]) {
                     authorsData[author] = [];
                     authorsData[author].push({ x: chartStartDate, y: 0 });

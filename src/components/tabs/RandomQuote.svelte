@@ -1,7 +1,5 @@
 <script lang="ts">
-    import Fa from 'svelte-fa';
-    import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
-
+    import { ThumbsUp, ThumbsDown } from 'lucide-svelte';
     import { auth } from '../../firebase';
     import { updateDoc } from 'firebase/firestore';
     import Typewriter from 'svelte-typewriter';
@@ -26,7 +24,7 @@
 
     function resetStringList() {
         console.log('[NC Log] Reached the end of the quote list. Resetting.');
-        stringList = [...fullQuoteList]; // Use spread operator for array cloning
+        stringList = [...fullQuoteList];
         shuffleArray(stringList);
     }
 
@@ -35,22 +33,18 @@
             resetStringList();
         }
         spoiler = true;
-        randomQuote = stringList.pop(); // Pop the last element from the shuffled array
+        randomQuote = stringList.pop();
         randomQuote.quote += ' ';
         voted = checkVoteStatus();
     }
 
     function checkVoteStatus(): string {
         if (randomQuote === undefined || randomQuote.votes === undefined) {
-            console.log('failed');
             return undefined;
         }
+
         if (auth.currentUser) {
-            console.log('is user');
-            // Check if user has voted on this quote
-            console.log('finding vote');
             const vote = randomQuote.votes.find((vote) => vote.uuid === auth.currentUser.uid);
-            console.log(vote);
             if (vote) {
                 return vote.vote;
             } else {
@@ -60,17 +54,15 @@
     }
 
     async function addVoteToQuote(vote: boolean) {
-        //find current random quote in fullQuoteList
         let quoteIndex = fullQuoteList.findIndex((quote) => quote.quote === randomQuote.quote);
         let voteString = vote ? 'upvote' : 'downvote';
-        //check if votes exists in quote
         if (fullQuoteList[quoteIndex].votes === undefined) {
             fullQuoteList[quoteIndex].votes = [];
         }
-        //add vote to quote, unless vote already exists in which case replace it. If vote is equal to current vote, remove vote
         let voteIndex = fullQuoteList[quoteIndex].votes.findIndex(
             (vote) => vote.uuid === auth.currentUser.uid,
         );
+
         let voteRemoved = false;
         if (voteIndex !== -1) {
             if (fullQuoteList[quoteIndex].votes[voteIndex].vote === voteString) {
@@ -85,7 +77,7 @@
                 vote: voteString,
             });
         }
-        //update doc
+
         await updateDoc(docRef, { quote_list: fullQuoteList }).then(() => {
             if (voteIndex !== -1) {
                 if (voteRemoved) {
@@ -139,13 +131,13 @@
             class="custom-button upvote"
             class:selected={voted === 'upvote'}
             disabled={randomQuote == undefined}
-            on:click={() => addVoteToQuote(true)}><Fa icon={faThumbsUp} size="lg" /></button
+            on:click={() => addVoteToQuote(true)}><ThumbsUp size={28} /></button
         >
         <button
             class="custom-button downvote"
             class:selected={voted === 'downvote'}
             disabled={randomQuote == undefined}
-            on:click={() => addVoteToQuote(false)}><Fa icon={faThumbsDown} size="lg" /></button
+            on:click={() => addVoteToQuote(false)}><ThumbsDown size={28} /></button
         >
     </div>
 </div>

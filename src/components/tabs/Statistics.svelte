@@ -105,5 +105,6 @@
         padding-right: 5vw;
         padding-top: 2vh;
         max-width: 100%;
+        max-height: 80vh;
     }
 </style>

@@ -1,17 +1,10 @@
 <script lang="ts">
     import { fade } from 'svelte/transition';
-
     import { afterUpdate } from 'svelte';
     import Chart from 'chart.js/auto';
+    import 'chartjs-adapter-date-fns';
 
     export let fullQuoteList = [];
-
-    let chart;
-    const authorsData = {};
-    const startDate = 1704067200;
-    const chartStartDate = 1708440889;
-    let today = Date.now();
-    let uniqueDatetimes = [startDate, chartStartDate, today];
 
     afterUpdate(() => {
         if (fullQuoteList.length > 0 && !chart) {
@@ -19,16 +12,23 @@
         }
     });
 
+    let chart;
+    let chartEl: HTMLCanvasElement;
+    const authorsData = {};
+    const chartStartDate = 1708440889000;
+    let today = Date.now();
+    let uniqueDatetimes = [chartStartDate, today];
+
     function createChart() {
         fullQuoteList.forEach((quote) => {
             let authors = quote.author.split(/[&,]/);
-            let datetime = quote.datetime ? quote.datetime.seconds : chartStartDate;
+            let datetime = quote.datetime ? quote.datetime.seconds * 1000 : chartStartDate;
 
             authors.forEach((author) => {
                 author = author.trim();
                 if (!authorsData[author]) {
                     authorsData[author] = [];
-                    authorsData[author].push({ x: startDate, y: 0 });
+                    authorsData[author].push({ x: chartStartDate, y: 0 });
                 }
 
                 let existingIndex = authorsData[author].findIndex((entry) => entry.x === datetime);
@@ -61,10 +61,9 @@
         // Sort the datetime values
         uniqueDatetimes.sort();
 
-        // Render chart
-        const ctx = document.getElementById('myChart').getContext('2d');
+        const ctx = chartEl.getContext('2d');
 
-        const chart = new Chart(ctx, {
+        chart = new Chart(ctx, {
             type: 'line',
             data: {
                 datasets,
@@ -72,7 +71,14 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                        },
+                    },
                     y: {
                         title: {
                             display: true,
@@ -86,5 +92,18 @@
 </script>
 
 <div class="parent-div quotes" transition:fade={{ duration: 100 }}>
-    <canvas id="myChart" width={400} height={400}></canvas>
+    <canvas bind:this={chartEl}></canvas>
 </div>
+
+<style>
+    .parent-div {
+        width: 100%;
+    }
+
+    canvas {
+        padding-left: 5vw;
+        padding-right: 5vw;
+        padding-top: 2vh;
+        max-width: 100%;
+    }
+</style>

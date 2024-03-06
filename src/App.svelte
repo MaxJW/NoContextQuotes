@@ -20,10 +20,11 @@
             })
             .catch((error) => {
                 console.log(error.code, error.message);
+                toast.push(`⚠️ Error ${error.code}: ${error.message}`, { initial: 0 });
                 toast.push(
                     '⚠️ Unable to authenticate with Google. Please try again or report this!',
+                    { initial: 0 },
                 );
-                toast.push(`⚠️ Error ${error.code}: ${error.message}`);
             });
     }
 </script>

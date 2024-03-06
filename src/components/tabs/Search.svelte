@@ -120,6 +120,12 @@
         max-width: 90vw;
     }
 
+    @media only screen and (max-width: 480px) {
+        .quote-list {
+            height: 60vh;
+        }
+    }
+
     .quote-list li {
         border-radius: 4px;
         padding: 10px;

@@ -18,6 +18,28 @@
     const chartStartDate = 1708440889000;
     let today = Date.now();
     let uniqueDatetimes = [chartStartDate, today];
+    const colorPalette = [
+        '#e6194B', // Red
+        '#3cb44b', // Green
+        '#ffe119', // Yellow
+        '#4363d8', // Blue
+        '#f58231', // Orange
+        '#911eb4', // Purple
+        '#42d4f4', // Cyan
+        '#f032e6', // Magenta
+        '#bfef45', // Lime
+        '#fabed4', // Pink
+        '#469990', // Teal
+        '#dcbeff', // Lavender
+        '#9A6324', // Brown
+        '#fffac8', // Beige
+        '#800000', // Maroon
+        '#aaffc3', // Mint
+        '#808000', // Olive
+        '#ffd8b1', // Apricot
+        '#000075', // Navy
+        '#a9a9a9', // Grey
+    ];
 
     function createChart() {
         fullQuoteList.forEach((quote) => {
@@ -51,10 +73,11 @@
         }
 
         // Prepare dataset for Chart.js
-        const datasets = Object.entries(authorsData).map(([author, data]) => ({
+        const datasets = Object.entries(authorsData).map(([author, data], index) => ({
             label: author,
             data,
             fill: false,
+            borderColor: colorPalette[index],
         }));
 
         // Sort the datetime values

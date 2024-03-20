@@ -127,7 +127,7 @@
         {/if}
     </div>
     <button class="custom-button load-quote" on:click={selectRandomQuote}>Load Random Quote</button>
-    <div class="vote-buttons">
+    <!-- <div class="vote-buttons">
         <button
             class="custom-button upvote"
             class:selected={voted === 'upvote'}
@@ -140,7 +140,7 @@
             disabled={randomQuote == undefined}
             on:click={() => addVoteToQuote(false)}><ThumbsDown size={28} /></button
         >
-    </div>
+    </div> -->
 </div>
 
 <style>

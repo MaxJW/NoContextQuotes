@@ -1,6 +1,6 @@
 <script lang="ts">
-    import ThumbsUp from 'lucide-svelte/icons/thumbs-up';
-    import ThumbsDown from 'lucide-svelte/icons/thumbs-down';
+    // import ThumbsUp from 'lucide-svelte/icons/thumbs-up';
+    // import ThumbsDown from 'lucide-svelte/icons/thumbs-down';
     import { toast } from '@zerodevx/svelte-toast';
     import { fade } from 'svelte/transition';
     import Typewriter from 'svelte-typewriter';
@@ -180,7 +180,7 @@
         max-width: 250px;
     }
 
-    .vote-buttons {
+    /* .vote-buttons {
         display: flex;
         justify-content: space-evenly;
         width: 90%;
@@ -214,5 +214,5 @@
     .vote-buttons button.downvote.selected,
     .vote-buttons button.downvote:hover:not(:disabled) {
         background-color: #d11608;
-    }
+    } */
 </style>

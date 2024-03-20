@@ -9,12 +9,12 @@
     let searchResults = [];
     let showNoResults = false;
 
-    $: fullQuoteList, search();
+    $: fullQuoteList, search(searchString);
 
-    function search() {
+    function search(searchTerm: string) {
         console.log('[NC Log] Searching');
         searchResults = fullQuoteList.filter((quote) => {
-            const lowercaseSearch = searchString.toLowerCase();
+            const lowercaseSearch = searchTerm.toLowerCase();
             const lowercaseQuote = quote.quote.toLowerCase();
             const lowercaseAuthor = quote.author.toLowerCase();
             const authors = lowercaseAuthor.split(/[&,]/).map((author) => author.trim());
@@ -33,7 +33,7 @@
 
     function filterByAuthor(event) {
         selectedAuthor = event.target.value;
-        search();
+        search(searchString);
     }
 
     function resetSearch() {
@@ -41,7 +41,7 @@
     }
 
     onMount(() => {
-        search();
+        search(searchString);
     });
 </script>
 
@@ -49,12 +49,9 @@
     <h2>Search</h2>
     <div class="search-container">
         <input type="text" bind:value={searchString} placeholder="Search..." />
-        {#if searchString}
-            <button class="clear-button" on:click={resetSearch}>
-                <span>&times;</span>
-            </button>
-        {/if}
-        <button class="custom-button" on:click={search}>Search</button>
+        <button class="clear-button" on:click={resetSearch}>
+            <span>&times;</span>
+        </button>
     </div>
     <select class="author-select" bind:value={selectedAuthor} on:change={filterByAuthor}>
         <option value="">All Authors</option>

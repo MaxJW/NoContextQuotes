@@ -89,7 +89,12 @@
     </TabPanel>
 
     <TabPanel>
-        <SubmitQuote {docRef} />
+        <SubmitQuote
+            {docRef}
+            authorList={Array.from(new Set(fullQuoteList.map((quote) => quote.author)))
+                .filter((author) => !author.includes('&'))
+                .sort((a, b) => a.localeCompare(b))}
+        />
     </TabPanel>
 
     <TabPanel>

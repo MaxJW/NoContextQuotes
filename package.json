@@ -28,6 +28,7 @@
 		"date-fns": "^3.3.1",
 		"firebase": "^10.0.0",
 		"lucide-svelte": "^0.349.0",
+		"svelecte": "^4.0.1",
 		"svelte-tabs": "^1.1.0"
 	}
 }
